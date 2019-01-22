@@ -14,9 +14,17 @@ import java.util.List;
 
 import br.com.estudo.filmespopulares.R;
 import br.com.estudo.filmespopulares.data.model.Filme;
+import br.com.estudo.filmespopulares.data.network.ApiService;
+import br.com.estudo.filmespopulares.data.network.response.FilmesResult;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ListaFilmesActivity extends AppCompatActivity {
+
+    RecyclerView  recyclerFilmes;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,37 +34,22 @@ public class ListaFilmesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView  recyclerFilmes = findViewById(R.id.recycler_filmes);
+        recyclerFilmes = findViewById(R.id.recycler_filmes);
 
-        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        ApiService.getInstance().obterFilmesPopulares( "32ac19108cbd4e2a9c931a3f403b1b14").enqueue(new Callback<FilmesResult>() {
+                       @Override
+                       public void onResponse(Call<FilmesResult> call, Response<FilmesResult> response) {
+                           if (response.isSuccessful()) {
+                               RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(ListaFilmesActivity.this);
+                               recyclerFilmes.setLayoutManager(linearLayoutManager);
+                               recyclerFilmes.setAdapter(new ListaFilmesAdapter(response.body().getResultadoFilmes()));
+                           }
+                       }
 
-        recyclerFilmes.setLayoutManager(linearLayoutManager);
-        recyclerFilmes.setAdapter(new ListaFilmesAdapter(criaFilmes()));
+                       @Override
+                        public void onFailure(Call<FilmesResult> call, Throwable t) {
+
+                      }
+                      });
     }
-
-    private List<Filme> criaFilmes(){
-       return Arrays.asList(
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro"),
-            new Filme("Corações de ferro")
-       );
-    };
 }
