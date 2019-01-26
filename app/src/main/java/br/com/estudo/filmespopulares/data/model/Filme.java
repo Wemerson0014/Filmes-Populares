@@ -2,13 +2,20 @@ package br.com.estudo.filmespopulares.data.model;
 
 public class Filme {
 
-    private final String nome;
+    private final String titulo;
+    private final String caminhoPoster;
 
-    public Filme(String nome) {
-        this.nome = nome;
+    public Filme(String titulo, String caminhoPoster) {
+        this.titulo = titulo;
+        this.caminhoPoster = caminhoPoster;
     }
 
-    public String getNome() {
-        return nome;
+    public String getTitulo() {
+
+        return titulo;
+    }
+
+    public String getCaminhoPoster() {
+        return caminhoPoster;
     }
 }
