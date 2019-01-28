@@ -25,10 +25,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ListaFilmesActivity extends AppCompatActivity {
+public class ListaFilmesActivity extends AppCompatActivity implements ListaFilmesContrato.ListaFilmesView{
 
     private RecyclerView recyclerFilmes;
     private ListaFilmesAdapter filmesAdapter;
+    private ListaFilmesContrato.ListaFilmesPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +40,8 @@ public class ListaFilmesActivity extends AppCompatActivity {
 
         configuraAdapter();
 
-        obtemFilmes();
+       presenter = new ListaFilmesPresenter(this);
+       presenter.obtemFilmes();
 
 
     }
@@ -61,30 +63,19 @@ public class ListaFilmesActivity extends AppCompatActivity {
 
     }
 
-    private void obtemFilmes() {
-        ApiService.getInstance()
-                .obterFilmesPopulares("32ac19108cbd4e2a9c931a3f403b1b14")
-                .enqueue(new Callback<FilmesResult>() {
-                    @Override
-                    public void onResponse(Call<FilmesResult> call, Response<FilmesResult> response) {
-                        if (response.isSuccessful()) {
-                            final List<Filme> listaFilmes = FilmeMapper
-                                    .deResponseParaDominio(response.body().getResultadoFilmes());
-                            filmesAdapter.setFilmes(listaFilmes);
-                        } else {
-                            mostraErro();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<FilmesResult> call, Throwable t) {
-                        mostraErro();
-                    }
-                });
+    @Override
+    public void mostraFilmes(List<Filme> filmes) {
+        filmesAdapter.setFilmes(filmes);
     }
 
-    private void mostraErro() {
+    @Override
+    public void mostraErro() {
         Toast.makeText(this, "Erro ao obter lista de filmes.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.destruirView();
     }
 }
