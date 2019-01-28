@@ -55,10 +55,11 @@ public class ListaFilmesAdapter extends RecyclerView.Adapter<ListaFilmesAdapter.
             imagePosterFilme = itemView.findViewById(R.id.image_poster_filme);
 
         }
-        private void bind(Filme filme){
+
+        private void bind(Filme filme) {
             textTituloFilme.setText(filme.getTitulo());
             Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w342/" + filme.getCaminhoPoster())
+                    .load("https://image.tmdb.org/t/p/w342" + filme.getCaminhoPoster())
                     .into(imagePosterFilme);
         }
     }

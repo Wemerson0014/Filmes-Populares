@@ -4,7 +4,7 @@ import com.squareup.moshi.Json;
 
 public class FilmeResponse {
 
-    @Json(name = "poster path")
+    @Json(name = "poster_path")
     private final String caminhoPoster;
 
     @Json(name = "original_title")
