@@ -1,5 +1,6 @@
 package br.com.estudo.filmespopulares.ui.listafilmes;
 
+
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +60,11 @@ public class ListaFilmesAdapter extends RecyclerView.Adapter<ListaFilmesAdapter.
 
         private void bind(Filme filme) {
             textTituloFilme.setText(filme.getTitulo());
-            Picasso.get()
+
+            Glide.with(itemView.getContext())
                     .load("https://image.tmdb.org/t/p/w342" + filme.getCaminhoPoster())
                     .into(imagePosterFilme);
+
         }
     }
 
