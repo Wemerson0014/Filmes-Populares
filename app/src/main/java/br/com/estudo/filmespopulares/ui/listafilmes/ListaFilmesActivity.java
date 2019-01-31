@@ -1,6 +1,7 @@
 package br.com.estudo.filmespopulares.ui.listafilmes;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,15 +20,15 @@ import br.com.estudo.filmespopulares.data.mapper.FilmeMapper;
 import br.com.estudo.filmespopulares.data.model.Filme;
 import br.com.estudo.filmespopulares.data.network.ApiService;
 import br.com.estudo.filmespopulares.data.network.response.FilmesResult;
+import br.com.estudo.filmespopulares.ui.detalhesfilme.DetalhesFilmeActivity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ListaFilmesActivity extends AppCompatActivity implements ListaFilmesContrato.ListaFilmesView{
+public class ListaFilmesActivity extends AppCompatActivity implements ListaFilmesContrato.ListaFilmesView, ListaFilmesAdapter.ItemFilmeClickListener {
 
-    private RecyclerView recyclerFilmes;
     private ListaFilmesAdapter filmesAdapter;
     private ListaFilmesContrato.ListaFilmesPresenter presenter;
 
@@ -52,9 +53,9 @@ public class ListaFilmesActivity extends AppCompatActivity implements ListaFilme
     }
 
     private void configuraAdapter() {
-        recyclerFilmes = findViewById(R.id.recycler_filmes);
+        final RecyclerView recyclerFilmes = findViewById(R.id.recycler_filmes);
 
-        filmesAdapter = new ListaFilmesAdapter();
+        filmesAdapter = new ListaFilmesAdapter(this);
 
         RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
 
@@ -77,5 +78,12 @@ public class ListaFilmesActivity extends AppCompatActivity implements ListaFilme
     protected void onDestroy() {
         super.onDestroy();
         presenter.destruirView();
+    }
+
+    @Override
+    public void onItemFilmeClicado(Filme filme) {
+        Intent intent = new Intent (this, DetalhesFilmeActivity.class);
+        intent.putExtra(DetalhesFilmeActivity.EXTRA_FILME, filme);
+        startActivity(intent);
     }
 }
